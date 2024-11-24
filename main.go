@@ -1,15 +1,24 @@
 package main
 
 import (
-	fileutils "GorillaZip/utils"
+	compressor "GorillaZip/compress"
+	"fmt"
+	"log"
+	"os"
 )
 
 func main() {
-	files, err := fileutils.ListFiles("./.git")
+	if len(os.Args) != 3 {
+		log.Fatalf("Usage: %s <input file> <output file>", os.Args[0])
+	}
+
+	inputFile := os.Args[1]
+	outputFile := os.Args[2]
+
+	err := compressor.CompressFile(inputFile, outputFile)
 	if err != nil {
-		panic(err)
+		log.Fatalf("Error compressing file: %v", err)
 	}
-	for _, file := range files {
-		println(file)
-	}
+
+	fmt.Printf("File '%s' compressed successfully to '%s'\n", inputFile, outputFile)
 }
